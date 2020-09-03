@@ -2,6 +2,11 @@
 
 A new Flutter application.
 
+source belajar:
+https://github.com/felangel/bloc/blob/master/examples/flutter_timer
+https://medium.com/nusanet/multiple-bloc-with-flutter-4f772ce7544b
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

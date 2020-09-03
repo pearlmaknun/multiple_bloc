@@ -10,7 +10,6 @@ part 'exam_timer_state.dart';
 
 class ExamTimerBloc extends Bloc<ExamTimerEvent, ExamTimerState> {
   Ticker _ticker;
-  int _duration;
 
   StreamSubscription<int> _tickerSubscription;
 

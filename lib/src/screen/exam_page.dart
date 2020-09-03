@@ -18,7 +18,8 @@ class _ExamPageState extends State<ExamPage> {
 
   @override
   void initState() {
-    _examBloc.add(GetUjian(_examTimerBloc, _sessionTimerBloc, _examBloc, Ticker()));
+    _examBloc
+        .add(GetUjian(_examTimerBloc, _sessionTimerBloc, _examBloc, new Ticker(), new Ticker()));
     super.initState();
   }
 
@@ -39,23 +40,50 @@ class _ExamPageState extends State<ExamPage> {
             )
           ],
           child: BlocBuilder<ExamTimerBloc, ExamTimerState>(
-            builder: (context, state){
-              if (state is ExamTimerRunInProgress){
+            builder: (context, state) {
+              if (state is ExamTimerRunInProgress) {
                 final String minutesStr = ((state.duration / 60) % 60)
                     .floor()
                     .toString()
                     .padLeft(2, '0');
-                final String secondsStr = (state.duration % 60)
-                    .floor()
-                    .toString()
-                    .padLeft(2, '0');
+                final String secondsStr =
+                    (state.duration % 60).floor().toString().padLeft(2, '0');
                 return Center(
                   child: Column(
                     children: [
                       Text(
                         '$minutesStr:$secondsStr',
                       ),
-                      BlocBuilder<ExamBloc, ExamState>(
+                      BlocBuilder<SessionTimerBloc, SessionTimerState>(
+                        builder: (context, state) {
+                          final String sminutesStr = ((state.duration / 60) % 60)
+                              .floor()
+                              .toString()
+                              .padLeft(2, '0');
+                          final String ssecondsStr =
+                          (state.duration % 60).floor().toString().padLeft(2, '0');
+                          return Column(
+                            children: [
+                              Text(
+                                '$sminutesStr:$ssecondsStr',
+                              ),
+                              BlocBuilder<ExamBloc, ExamState>(
+                                builder: (context, state) {
+                                  if (state is UjianShowed) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(state.list[0].list[0].soal),
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      )
+                      /*BlocBuilder<ExamBloc, ExamState>(
                         builder: (context, state) {
                           if (state is UjianShowed) {
                             return Padding(
@@ -66,7 +94,7 @@ class _ExamPageState extends State<ExamPage> {
                             return Container();
                           }
                         },
-                      )
+                      )*/
                     ],
                   ),
                 );
