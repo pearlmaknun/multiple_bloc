@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:multiplebloc/src/helper/ticker.dart';
 
 part 'session_timer_event.dart';
+
 part 'session_timer_state.dart';
 
 class SessionTimerBloc extends Bloc<SessionTimerEvent, SessionTimerState> {
@@ -14,15 +15,14 @@ class SessionTimerBloc extends Bloc<SessionTimerEvent, SessionTimerState> {
 
   SessionTimerBloc() : super(SessionTimerInitial());
 
-  void onTransition(Transition<SessionTimerEvent, SessionTimerState> transition) {
+  void onTransition(
+      Transition<SessionTimerEvent, SessionTimerState> transition) {
     print(transition);
     super.onTransition(transition);
   }
 
   @override
-  Stream<SessionTimerState> mapEventToState(
-    SessionTimerEvent event,
-  ) async* {
+  Stream<SessionTimerState> mapEventToState(SessionTimerEvent event,) async* {
     if (event is SessionTimerStarted) {
       yield* _mapTimerStartedToState(event);
     } else if (event is SessionTimerTicked) {
@@ -36,7 +36,8 @@ class SessionTimerBloc extends Bloc<SessionTimerEvent, SessionTimerState> {
     return super.close();
   }
 
-  Stream<SessionTimerState> _mapTimerStartedToState(SessionTimerStarted event) async* {
+  Stream<SessionTimerState> _mapTimerStartedToState(
+      SessionTimerStarted event) async* {
     _ticker = event.ticker;
     yield SessionTimerRunInProgress(event.duration);
     _tickerSubscription?.cancel();
@@ -45,9 +46,20 @@ class SessionTimerBloc extends Bloc<SessionTimerEvent, SessionTimerState> {
         .listen((duration) => add(SessionTimerTicked(duration)));
   }
 
-  Stream<SessionTimerState> _mapTimerTickedToState(SessionTimerTicked event) async* {
-    yield event.duration > 0
+  Stream<SessionTimerState> _mapTimerTickedToState(
+      SessionTimerTicked event) async* {
+    /*yield event.duration > 0
         ? SessionTimerRunInProgress(event.duration)
-        : SessionTimerRunComplete(0);
+        : SessionTimerRunComplete(0);*/
+    if (event.duration > 0) {
+      yield SessionTimerRunInProgress(event.duration);
+    } else {
+      //SessionTimerRunComplete(0);
+      yield SessionTimerRunInProgress(120);
+      _tickerSubscription?.cancel();
+      _tickerSubscription = _ticker
+          .tick(ticks: 120)
+          .listen((duration) => add(SessionTimerTicked(duration)));
+    }
   }
 }
