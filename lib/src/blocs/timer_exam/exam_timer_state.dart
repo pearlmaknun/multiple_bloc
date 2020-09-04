@@ -1,33 +1,25 @@
 part of 'exam_timer_bloc.dart';
 
 abstract class ExamTimerState extends Equatable {
-  const ExamTimerState();
+  final int duration;
+
+  const ExamTimerState(this.duration);
+
+  @override
+  List<Object> get props => [duration];
 }
 
 class ExamTimerInitial extends ExamTimerState {
-  @override
-  List<Object> get props => [];
+  ExamTimerInitial({int duration}) : super(duration);
 }
 
 class ExamTimerRunInProgress extends ExamTimerState {
-  final int duration;
-
-  const ExamTimerRunInProgress(this.duration);
-
-  @override
-  // TODO: implement props
-  List<Object> get props => [duration];
+  const ExamTimerRunInProgress(int duration) : super(duration);
 
   @override
   String toString() => 'TimerRunInProgress { duration: $duration }';
 }
 
 class ExamTimerRunComplete extends ExamTimerState {
-  final int duration;
-
-  const ExamTimerRunComplete(this.duration);
-
-  @override
-  // TODO: implement props
-  List<Object> get props => [];
+  const ExamTimerRunComplete(int duration) : super(0);
 }

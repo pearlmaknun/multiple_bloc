@@ -32,10 +32,10 @@ class ExamBloc extends Bloc<ExamEvent, ExamState> {
     }
   }
 
-  Stream<ExamState> _mapGetUjianToState(GetUjian state) async* {
+  Stream<ExamState> _mapGetUjianToState(GetUjian event) async* {
     _list = getExam();
-    state.examTimerBloc.add(ExamTimerStarted(360, state.examBloc, state.ticker));
-    state.sessionTimerBloc.add(SessionTimerStarted(_list[0].waktu, state.tickerSession));
+    event.examTimerBloc.add(ExamTimerStarted(360, event.examBloc, event.ticker));
+    event.sessionTimerBloc.add(SessionTimerStarted(_list[0].waktu, event.tickerSession));
     yield UjianShowed(_list);
   }
 
